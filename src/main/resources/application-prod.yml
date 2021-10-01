@@ -10,8 +10,5 @@ keycloak:
     realm: blog
     auth-server-url: ${SSO_ADDRESS}
     resource: gateway-service
-    credentials:
-        secret: ${SSO_SECRET}
     bearer-only: true
-    public-client: true
     principal-attribute: preferred_username

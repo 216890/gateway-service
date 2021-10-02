@@ -12,3 +12,5 @@ keycloak:
     resource: gateway-service
     bearer-only: true
     principal-attribute: preferred_username
+    credentials:
+        secret: ${SSO_SECRET}

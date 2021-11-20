@@ -43,10 +43,4 @@ class ApplicationConfig {
 
     @Bean
     fun userProvider(userServiceClient: UserServiceClient) = UserServiceAdapter(userServiceClient)
-
-    @Bean
-    fun metricsCommonTags(@Value("spring.application.name") applicationName: String): MeterRegistryCustomizer<MeterRegistry> =
-        MeterRegistryCustomizer { registry: MeterRegistry ->
-            registry.config().commonTags("application", applicationName)
-        }
 }

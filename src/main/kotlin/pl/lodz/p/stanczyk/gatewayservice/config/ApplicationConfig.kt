@@ -1,5 +1,8 @@
 package pl.lodz.p.stanczyk.gatewayservice.config
 
+import io.micrometer.core.instrument.MeterRegistry
+import org.springframework.beans.factory.annotation.Value
+import org.springframework.boot.actuate.autoconfigure.metrics.MeterRegistryCustomizer
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import pl.lodz.p.stanczyk.gatewayservice.adapter.ArticleServiceAdapter
@@ -21,7 +24,11 @@ class ApplicationConfig {
         )
 
     @Bean
-    fun commentService(articleServiceClient: ArticleServiceClient, commentServiceClient: CommentServiceClient, userServiceClient: UserServiceClient) =
+    fun commentService(
+        articleServiceClient: ArticleServiceClient,
+        commentServiceClient: CommentServiceClient,
+        userServiceClient: UserServiceClient
+    ) =
         CommentService(
             articleProvider(articleServiceClient),
             commentProvider(commentServiceClient),
@@ -36,4 +43,10 @@ class ApplicationConfig {
 
     @Bean
     fun userProvider(userServiceClient: UserServiceClient) = UserServiceAdapter(userServiceClient)
+
+    @Bean
+    fun metricsCommonTags(@Value("spring.application.name") applicationName: String): MeterRegistryCustomizer<MeterRegistry> =
+        MeterRegistryCustomizer { registry: MeterRegistry ->
+            registry.config().commonTags("application", applicationName)
+        }
 }
